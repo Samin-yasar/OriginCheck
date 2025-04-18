@@ -1,4 +1,3 @@
-// countries.js
 const countryData = {
   "000-019": { name: "United States (UPC-A compatible)", flag: "🇺🇸" },
   "020-029": { name: "United States (restricted circulation numbers)", flag: "🇺🇸" },

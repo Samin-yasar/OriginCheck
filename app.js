@@ -74,3 +74,8 @@ document.getElementById("check-manual").addEventListener("click", checkBarcodeMa
 function reportSuspiciousProduct() {
   alert("Thank you for reporting! We'll investigate the issue.");
 }
+
+// Get country from prefix using data from countries.js
+function getCountryFromEANPrefix(prefix) {
+  return countryData[prefix] || { name: "Unknown", flag: "🏳️" };
+}

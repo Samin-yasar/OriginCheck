@@ -4,9 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Barcode Country Checker</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Barcode scanning libraries (jsDelivr CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.0/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@latest/dist/html5-qrcode.min.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
   <div id="app">
@@ -14,28 +19,29 @@
     
     <!-- Scanner Section -->
     <div id="scanner">
-      <div id="reader"></div>
+      <div id="reader" aria-live="polite"></div>
       <div id="scan-line"></div>
-      <input type="text" id="manual-input" placeholder="Enter Barcode Manually" />
-      <button id="check-manual">Check Country</button>
+      <label for="manual-input">Enter Barcode Manually</label>
+      <input type="text" id="manual-input" placeholder="Enter barcode" aria-describedby="manual-input-error" />
+      <div id="manual-input-error" role="alert"></div>
+      <button id="check-manual" aria-label="Check country from manual barcode input">Check Country</button>
+      <div id="scanner-error" role="alert"></div>
     </div>
 
     <!-- Country Information -->
     <div id="country-info">
-      <h2 id="country-name"></h2>
+      <h2 id="country-name" aria-live="assertive"></h2>
     </div>
 
     <!-- Map Section -->
-    <div id="map"></div>
+    <div id="map" style="height: 400px;"></div>
 
-    <!-- Dark Mode Toggle -->
-    <button id="dark-mode-toggle">Toggle Dark Mode</button>
-    
-    <!-- Report Suspicious Product -->
-    <button onclick="reportSuspiciousProduct()">Report Suspicious Product</button>
+    <!-- Controls -->
+    <button id="dark-mode-toggle" aria-label="Toggle dark mode">Toggle Dark Mode</button>
+    <button id="report-suspicious" aria-label="Report suspicious product">Report Suspicious Product</button>
   </div>
 
-  <script src="countries.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="countries.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

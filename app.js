@@ -1,8 +1,5 @@
-// app.js
 import { getCountryByEANPrefix } from './countries.js';
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if Html5QrcodeScanner is available
   if (typeof Html5QrcodeScanner === 'undefined') {
     document.getElementById('scanner-error').textContent = 'Error: Barcode scanner library failed to load. Please try refreshing the page.';
     return;
@@ -25,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     scanner = new Html5QrcodeScanner(
       'reader',
       {
-        fps: 20,
+        fps: 30,
         qrbox: { width: 300, height: 300 },
         disableFlip: true,
         formatsToSupport: [
@@ -41,9 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Success callback
     function onScanSuccess(decodedText, decodedResult) {
-      console.log(`Scanned: ${decodedText}`, decodedResult); // Debug
-      const prefix = decodedText.slice(0, 3);
+      console.log(`Raw barcode: "${decodedText}"`, { decodedResult }); // Debug raw input
+      const cleanBarcode = decodedText.trim().replace(/\D/g, ''); // Remove non-digits
+      if (cleanBarcode.length < 8 || cleanBarcode.length > 13) {
+        document.getElementById('scanner-error').textContent = 'Invalid barcode length. Must be 8-13 digits.';
+        document.getElementById('retry-scan').style.display = 'block';
+        return;
+      }
+      const prefix = cleanBarcode.slice(0, 3).padStart(3, '0'); // Ensure 3 digits
+      console.log(`Extracted prefix: "${prefix}"`); // Debug prefix
       const country = getCountryByEANPrefix(prefix);
+      console.log(`Country match:`, country); // Debug match result
       
       document.getElementById('country-name').textContent = `${country.flag} ${country.name}`;
       document.getElementById('scanner-error').textContent = '';
@@ -126,12 +131,15 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('manual-input-error').textContent = 'Please enter a barcode.';
       return;
     }
-    if (!/^\d{8,13}$/.test(barcode)) {
+    const cleanBarcode = barcode.replace(/\D/g, ''); // Remove non-digits
+    if (!/^\d{8,13}$/.test(cleanBarcode)) {
       document.getElementById('manual-input-error').textContent = 'Enter a valid 8-13 digit barcode.';
       return;
     }
-    const prefix = barcode.slice(0, 3);
+    const prefix = cleanBarcode.slice(0, 3).padStart(3, '0'); // Ensure 3 digits
+    console.log(`Manual input barcode: "${cleanBarcode}", prefix: "${prefix}"`); // Debug
     const country = getCountryByEANPrefix(prefix);
+    console.log(`Manual country match:`, country); // Debug
     document.getElementById('country-name').textContent = `${country.flag} ${country.name}`;
     document.getElementById('manual-input-error').textContent = '';
     showMapLocation(country.name);

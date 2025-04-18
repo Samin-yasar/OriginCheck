@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barcode Country Checker</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>Barcode Country Checker</h1>
+    
+    <!-- Scanner Section -->
+    <div id="scanner">
+      <div id="reader"></div>
+      <div id="scan-line"></div>
+      <input type="text" id="manual-input" placeholder="Enter Barcode Manually" />
+      <button id="check-manual">Check Country</button>
+    </div>
+
+    <!-- Country Information -->
+    <div id="country-info">
+      <h2 id="country-name"></h2>
+    </div>
+
+    <!-- Map Section -->
+    <div id="map"></div>
+
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle">Toggle Dark Mode</button>
+    
+    <!-- Report Suspicious Product -->
+    <button onclick="reportSuspiciousProduct()">Report Suspicious Product</button>
+  </div>
+
+  <script src="countries.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

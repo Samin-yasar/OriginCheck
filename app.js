@@ -1,22 +1,17 @@
-// app.js
-import { countryData } from './countries.js'; // Assumes countryData is exported
+import { countryData } from './countries.js'; 
 
-// Wait for DOM and scripts to load
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if Html5QrcodeScanner is available
   if (typeof Html5QrcodeScanner === 'undefined') {
     document.getElementById('scanner-error').textContent = 'Error: Barcode scanner library failed to load. Please try refreshing the page.';
     return;
   }
 
-  // Barcode scanner setup
   const scanner = new Html5QrcodeScanner(
     'reader',
     { fps: 10, qrbox: { width: 250, height: 250 } },
     false
   );
 
-  // Initialize map once
   let map = null;
 
   // Success callback for scanner

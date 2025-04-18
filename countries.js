@@ -1,3 +1,5 @@
+console.log('countries.js loaded'); // Debug
+
 const countryData = {
   "000-019": { name: "United States (UPC-A compatible)", flag: "🇺🇸" },
   "020-029": { name: "United States (restricted circulation numbers)", flag: "🇺🇸" },
@@ -31,7 +33,7 @@ const countryData = {
   "484": { name: "Moldova", flag: "🇲🇩" },
   "485": { name: "Armenia", flag: "🇦🇲" },
   "486": { name: "Georgia", flag: "🇬🇪" },
-  "487": { name: "Kazakhstan", flag: "🇰🇿" },
+  "487": { name: "Kazakhstan", flag: "🇻🇮" },
   "488": { name: "Tajikistan", flag: "🇹🇯" },
   "489": { name: "Hong Kong", flag: "🇭🇰" },
   "490-499": { name: "Japan (original)", flag: "🇯🇵" },
@@ -143,18 +145,39 @@ const countryData = {
   "990-999": { name: "GS1 coupon identification", flag: "💵" }
 };
 
-function getCountryByEANPrefix(prefix) {
-  const prefixNum = parseInt(prefix);
-  if (isNaN(prefixNum)) {
-    return { name: "Unknown Origin", flag: "❓" };
-  }
+// Pre-process countryData into a prefix lookup table
+console.log('Building prefix lookup'); // Debug
+const prefixLookup = {};
+try {
   for (let range in countryData) {
-    let [start, end] = range.split('-').map(num => parseInt(num));
-    if (prefixNum >= start && prefixNum <= end) {
-      return countryData[range];
+    const [start, end] = range.split('-').map(num => parseInt(num));
+    if (isNaN(end)) {
+      // Single prefix (e.g., "894")
+      prefixLookup[start.toString().padStart(3, '0')] = countryData[range];
+    } else {
+      // Range (e.g., "000-019")
+      for (let i = start; i <= end; i++) {
+        prefixLookup[i.toString().padStart(3, '0')] = countryData[range];
+      }
     }
   }
-  return { name: "Unknown Origin", flag: "❓" };
+  console.log('Prefix lookup built:', Object.keys(prefixLookup).length, 'entries'); // Debug
+} catch (error) {
+  console.error('Failed to build prefix lookup:', error);
+}
+
+function getCountryByEANPrefix(prefix) {
+  console.log('getCountryByEANPrefix called with:', prefix); // Debug
+  try {
+    const cleanPrefix = prefix.trim().padStart(3, '0');
+    console.log(`Looking up prefix: "${cleanPrefix}"`); // Debug
+    const result = prefixLookup[cleanPrefix] || { name: "Unknown Origin", flag: "❓" };
+    console.log(`Match:`, result); // Debug
+    return result;
+  } catch (error) {
+    console.error('Error in getCountryByEANPrefix:', error);
+    return { name: "Unknown Origin", flag: "❓" };
+  }
 }
 
 export { countryData, getCountryByEANPrefix };

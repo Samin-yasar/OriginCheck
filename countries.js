@@ -1,3 +1,4 @@
+// countries.js
 const countryData = {
   "000-019": { name: "United States (UPC-A compatible)", flag: "🇺🇸" },
   "020-029": { name: "United States (restricted circulation numbers)", flag: "🇺🇸" },
@@ -104,17 +105,21 @@ const countryData = {
   "779": { name: "Argentina", flag: "🇦🇷" },
   "780": { name: "Chile", flag: "🇨🇱" },
   "781": { name: "Argentina", flag: "🇦🇷" },
-  "782": { name: "Paraguay", flag: "🇵🇾" },
+  "782": { name: "Paraguay", flag: "🇵🇾" }
 };
 
 function getCountryByEANPrefix(prefix) {
+  const prefixNum = parseInt(prefix);
+  if (isNaN(prefixNum)) {
+    return { name: "Unknown Origin", flag: "❓" };
+  }
   for (let range in countryData) {
     let [start, end] = range.split('-').map(num => parseInt(num));
-    if (prefix >= start && prefix <= end) {
+    if (prefixNum >= start && prefixNum <= end) {
       return countryData[range];
     }
   }
   return { name: "Unknown Origin", flag: "❓" };
 }
 
-export { getCountryByEANPrefix };
+export { countryData, getCountryByEANPrefix };

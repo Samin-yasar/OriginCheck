@@ -1,3 +1,4 @@
+/* style.css */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -38,9 +39,10 @@ body {
   width: 200px;
 }
 
-#check-manual, #dark-mode-toggle, #report-suspicious {
+#check-manual, #dark-mode-toggle, #report-suspicious, #retry-scan {
   padding: 8px 16px;
   cursor: pointer;
+  margin: 5px;
 }
 
 #scanner-error, #manual-input-error {
